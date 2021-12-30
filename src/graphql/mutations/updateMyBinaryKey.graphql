@@ -1,0 +1,9 @@
+mutation updateMyBinaryKey(
+  $position:String!
+){
+  updateMyBinaryKey(
+    position:$position
+  ){
+    position
+  }
+}

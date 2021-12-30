@@ -1,0 +1,12 @@
+query getTodayBinaryPoints{
+  getTodayBinaryPoints{
+    id
+    formatted_position
+    formatted_date
+    position
+    points
+    from_user{
+      username
+    }
+  }
+}

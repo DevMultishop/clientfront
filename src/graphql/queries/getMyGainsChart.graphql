@@ -1,0 +1,3 @@
+query getMyGainsChart($month:Float! $year:Float!){
+  getMyGainsChart(month:$month year:$year)
+}

@@ -1,0 +1,3 @@
+query getIsWithdrawalOpen{
+  getIsWithdrawalOpen
+}

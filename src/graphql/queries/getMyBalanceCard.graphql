@@ -1,0 +1,8 @@
+query getMyBalanceCard($card:String!){
+  getMyBalanceCard(card:$card){
+    id
+    usd_cents
+    card
+    formatted_usd_value
+  }
+}

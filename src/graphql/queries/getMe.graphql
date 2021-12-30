@@ -1,0 +1,10 @@
+query getMe{
+  getMe{
+    id
+    full_name
+    username
+    email
+    phone_number
+    avatar_url
+  }
+}

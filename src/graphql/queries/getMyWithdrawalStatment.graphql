@@ -1,0 +1,12 @@
+query getMyWithdrawalStatment($month:Float! $year:Float!){
+  getMyWithdrawalStatment(month:$month year:$year){
+    id
+    address
+    txid
+    formatted_usd_value
+    formatted_btc_usd_conversion
+    formatted_btc_amount
+    txid_link
+    formatted_date
+  }
+}

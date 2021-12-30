@@ -1,0 +1,9 @@
+mutation createBitcoinWithdrawal(
+  $usd_value:Float!
+  $financial_password:String!
+){
+  createBitcoinWithdrawal(
+    usd_value:$usd_value
+    financial_password:$financial_password
+  )
+}

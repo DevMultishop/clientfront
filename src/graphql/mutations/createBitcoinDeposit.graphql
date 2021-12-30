@@ -1,0 +1,15 @@
+mutation createBitcoinDeposit(
+  $usd_value:Float!
+){
+  createBitcoinDeposit(
+    usd_value:$usd_value
+  ){
+    address
+    usd_cents
+    formatted_usd_value
+    formatted_btc_amount
+    btc_usd_conversion
+    formatted_btc_usd_conversion
+    created_at
+  }
+}

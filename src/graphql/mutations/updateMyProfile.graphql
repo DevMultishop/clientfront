@@ -1,0 +1,13 @@
+mutation updateMyProfile(
+  $phone_number:String!
+  $full_name:String!
+  $financial_password:String!
+  $password:String
+){
+  updateMyProfile(
+    phone_number:$phone_number
+    full_name:$full_name
+    financial_password:$financial_password
+    password:$password
+  )
+}

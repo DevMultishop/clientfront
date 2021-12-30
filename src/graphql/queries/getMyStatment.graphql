@@ -1,0 +1,9 @@
+query getMyStatment($month:Float! $year:Float! $card:String!){
+  getMyStatment(month:$month year:$year card:$card){
+    id
+    description
+    formatted_usd_value
+    formatted_date
+    color
+  }
+}

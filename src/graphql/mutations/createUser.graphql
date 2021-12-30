@@ -1,0 +1,13 @@
+mutation createUser(
+  $email_verification_id:String!
+  $username:String!
+  $phone_number:String!
+  $password:String!
+){
+  createUser(
+    email_verification_id:$email_verification_id
+    username:$username
+    phone_number:$phone_number
+    password:$password
+  )
+}

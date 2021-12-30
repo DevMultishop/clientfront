@@ -1,0 +1,3 @@
+query getBinaryTree($clicked_user_id:String $going_up:Boolean!){
+  getBinaryTree(clicked_user_id:$clicked_user_id going_up:$going_up)
+}

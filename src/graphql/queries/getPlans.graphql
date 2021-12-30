@@ -1,0 +1,8 @@
+query getPlans{
+  getPlans{
+    id
+    name
+    usd_cents
+    formatted_usd_value
+  }
+}

@@ -1,0 +1,9 @@
+query getBinaryDailyResults($month:Float! $year:Float!){
+  getBinaryDailyResults(month:$month year:$year){
+    id
+    left_points
+    right_points
+    formatted_date
+    formatted_bonus_value
+  }
+}

@@ -1,0 +1,11 @@
+mutation sendEmailVerificationToken(
+  $email:String!
+  $full_name:String!
+  $indicator_id:String!
+){
+  sendEmailVerificationToken(
+    email:$email
+    full_name:$full_name
+    indicator_id:$indicator_id
+  )
+}

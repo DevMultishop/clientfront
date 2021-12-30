@@ -1,0 +1,9 @@
+mutation createOrUpdateMyBitcoinWallet(
+  $financial_password:String!
+  $address:String!
+){
+  createOrUpdateMyBitcoinWallet(
+    financial_password:$financial_password
+    address:$address
+  )
+}

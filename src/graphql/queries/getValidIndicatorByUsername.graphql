@@ -1,0 +1,6 @@
+query getValidIndicatorByUsername($username:String!){
+  getValidIndicatorByUsername(username:$username){
+    id
+    full_name
+  }
+}

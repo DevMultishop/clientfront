@@ -1,0 +1,9 @@
+mutation createMyPlan(
+  $financial_password:String!
+  $plan_id:String!
+){
+  createMyPlan(
+    financial_password:$financial_password
+    plan_id:$plan_id
+  )
+}

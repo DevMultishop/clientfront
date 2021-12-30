@@ -1,0 +1,11 @@
+mutation createUserSession(
+  $password:String!
+  $username:String!
+){
+  createUserSession(
+    password:$password
+    username:$username
+  ){
+    token
+  }
+}
