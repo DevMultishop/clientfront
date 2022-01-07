@@ -3,20 +3,19 @@ export default {
   color: {
     primary: '#764385',
 
-    background: '#19181f',
-    backgroundHover: '#222129',
+    background: '#eee',
+    backgroundHover: '#fafafa',
 
-    backgroundBody: '#0b0a0d',
-    backgroundHeader: '#111116',
-    backgroundSidebar: '#202024',
-    backgroundCard: '#202024',
+    backgroundBody: '#f8f8f8',
+    backgroundHeader: '#fff',
+    backgroundSidebar: '#fff',
+    backgroundCard: '#fff',
 
     // menu
-    backgroundMenu: '#19181f',
+    backgroundMenu: '#f5f5f5',
 
-    fontColor: '#f8f8f8',
+    fontColor: '#626262',
     fontColorSecondary: '#fff',
-    fontColorContrasted: '#666360',
   },
   fontSize: {
     small: '0.8em',
