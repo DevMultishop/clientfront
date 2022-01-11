@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { shade } from 'polished';
 
 import notAuthenticatedBackground from '../../../assets/not-authenticated-background.png';
-import logoImg from '../../../assets/logo.svg';
+import logoImg from '../../../assets/logo.png';
 
 export const Container = styled.div`
   height: 100vh;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Image from '../../assets/logo.svg';
+import Image from '../../assets/logo.png';
 
 import { Container } from './styles';
 

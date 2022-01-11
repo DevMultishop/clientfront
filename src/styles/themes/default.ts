@@ -1,7 +1,7 @@
 export default {
   title: 'default',
   color: {
-    primary: '#764385',
+    primary: '#33af3e',
 
     background: '#eee',
     backgroundHover: '#fafafa',
