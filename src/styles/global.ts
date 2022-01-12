@@ -42,7 +42,7 @@ export default createGlobalStyle`
 
   .MuiPickersBasePicker-container{
       background: ${theme.color.background};
-      color: ${theme.color.fontColorSecondary};
+      color: ${theme.color.fontColor};
     }
 
     .MuiPickersMonth-monthSelected{
@@ -54,13 +54,13 @@ export default createGlobalStyle`
     }
 
     .MuiInputBase-root {
-      color: ${theme.color.fontColorSecondary};
+      color: ${theme.color.fontColor};
       height: 50px;
       border-radius: 5px;
       background: ${theme.color.background};
     }
     .MuiFormLabel-root {
-      color: ${theme.color.fontColorSecondary}
+      color: ${theme.color.fontColor}
     }
     .MuiFormLabel-root.Mui-focused {
       color: ${theme.color.primary}

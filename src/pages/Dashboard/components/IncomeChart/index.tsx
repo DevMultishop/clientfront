@@ -15,7 +15,7 @@ import {
   XYChartScrollbar,
   ExportMenu,
   animatedTheme,
-  darkTheme,
+  // darkTheme,
   NumberFormatter,
   LineSeries,
 } from '../../../../plugins/amcharts4';
@@ -31,7 +31,7 @@ export default function IncomeChart(): JSX.Element {
     function createGraph() {
       // Themes begin
       setTheme(animatedTheme);
-      setTheme(darkTheme);
+      // setTheme(darkTheme);
       // Themes end
 
       // Create chart instance

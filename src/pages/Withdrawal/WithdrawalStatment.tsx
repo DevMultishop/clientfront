@@ -24,7 +24,7 @@ export default function WithdrawalStatment({
     <div>
       <ul>
         <Line>
-          <Row style={{ color: 'white' }}>
+          <Row style={{ color: 'black' }}>
             <Col>DATE</Col>
             <Col>VALUE</Col>
             <Col>BTC</Col>

@@ -6,7 +6,7 @@ import {
   setTheme,
   ValueAxis,
   animatedTheme,
-  darkTheme,
+  // darkTheme,
   CategoryAxis,
   percent,
   Label,
@@ -26,7 +26,7 @@ export default function ProgressChart() {
     function createGraph() {
       // Themes begin
       setTheme(animatedTheme);
-      setTheme(darkTheme);
+      // setTheme(darkTheme);
       // Themes end
 
       // Create chart instance

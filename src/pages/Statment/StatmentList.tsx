@@ -28,7 +28,7 @@ export default function StatmentList({
       {data && (
         <ul>
           <Line>
-            <Row style={{ color: 'white' }}>
+            <Row style={{ color: 'black' }}>
               <Col>DATE</Col>
               <Col>VALUE</Col>
               <Col>DESCRIPTION</Col>

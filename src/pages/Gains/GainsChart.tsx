@@ -11,7 +11,7 @@ import {
   ValueAxis,
   ColumnSeries,
   animatedTheme,
-  darkTheme,
+  // darkTheme,
   CategoryAxis,
   Legend,
 } from '../../plugins/amcharts4';
@@ -63,7 +63,7 @@ export default function GainsChart({ month, year }: IParams): JSX.Element {
     function Graphh() {
       // Themes begin
       setTheme(animatedTheme);
-      setTheme(darkTheme);
+      // setTheme(darkTheme);
       // Themes end
 
       // Create chart instance
