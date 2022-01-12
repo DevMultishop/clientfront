@@ -1,0 +1,12 @@
+query getUnilevelByUserId($user_id:String!){
+  getUnilevelByUserId(user_id:$user_id){
+    user_id
+    indicator_id
+    user{
+      id
+      full_name
+      email
+      phone_number
+    }
+  }
+}

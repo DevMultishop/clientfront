@@ -1,5 +1,0 @@
-query getMyBinaryKey{
-  getMyBinaryKey{
-    position
-  }
-}

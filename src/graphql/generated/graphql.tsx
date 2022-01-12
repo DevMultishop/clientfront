@@ -28,6 +28,7 @@ export type Mutation = {
   sendEmailVerificationToken: Scalars['String'];
   createUser: Scalars['String'];
   createUserSession: UserSessionEvent;
+  createAdminSession: UserSessionEvent;
   sendForgotPasswordEmail: Scalars['String'];
   resetUserLoginPassword: Scalars['String'];
   sendFinancialPasswordEmail: Scalars['String'];
@@ -36,8 +37,10 @@ export type Mutation = {
   updateMyProfile: Scalars['String'];
   createBitcoinDeposit: UserBitcoinDepositEvent;
   createMyPlan: Scalars['String'];
-  updateMyBinaryKey: UserBinaryKey;
   createBitcoinWithdrawal: Scalars['String'];
+  updateDailyIncome: Scalars['String'];
+  createUserManualBalance: Scalars['String'];
+  processUsersBitcoinWithdrawal: Scalars['String'];
   createTxidNotification: Scalars['String'];
   createBlockNotification: Scalars['String'];
 };
@@ -56,6 +59,11 @@ export type MutationCreateUserArgs = {
 };
 
 export type MutationCreateUserSessionArgs = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type MutationCreateAdminSessionArgs = {
   username: Scalars['String'];
   password: Scalars['String'];
 };
@@ -95,13 +103,25 @@ export type MutationCreateMyPlanArgs = {
   plan_id: Scalars['String'];
 };
 
-export type MutationUpdateMyBinaryKeyArgs = {
-  position: Scalars['String'];
-};
-
 export type MutationCreateBitcoinWithdrawalArgs = {
   financial_password: Scalars['String'];
   usd_value: Scalars['Float'];
+};
+
+export type MutationUpdateDailyIncomeArgs = {
+  value: Scalars['String'];
+  income_id: Scalars['String'];
+};
+
+export type MutationCreateUserManualBalanceArgs = {
+  financial_password: Scalars['String'];
+  usd_value: Scalars['Float'];
+  target_user_id: Scalars['String'];
+};
+
+export type MutationProcessUsersBitcoinWithdrawalArgs = {
+  financial_password: Scalars['String'];
+  ids: Scalars['String'];
 };
 
 export type MutationCreateTxidNotificationArgs = {
@@ -120,6 +140,20 @@ export type Plan = {
   formatted_usd_value: Scalars['String'];
 };
 
+export type PlanDailyIncome = {
+  __typename?: 'PlanDailyIncome';
+  id: Scalars['String'];
+  year: Scalars['Float'];
+  month: Scalars['Float'];
+  day: Scalars['Float'];
+  value: Scalars['String'];
+  date_formatted: Scalars['String'];
+  applied: Scalars['Boolean'];
+  accumulated: Scalars['Float'];
+  created_at: Scalars['DateTime'];
+  updated_at: Scalars['DateTime'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getValidIndicatorByUsername: User;
@@ -128,10 +162,6 @@ export type Query = {
   getHasFinancialPassword: Scalars['Boolean'];
   getMyBalanceCard: UserBalance;
   getPlans: Array<Plan>;
-  getBinaryTree: Scalars['String'];
-  getMyBinaryKey: UserBinaryKey;
-  getTodayBinaryPoints: Array<UserBinaryPoint>;
-  getBinaryDailyResults: Array<UserBinaryStatus>;
   getIncomeChart: Scalars['String'];
   getMyProgressChart: Scalars['String'];
   getMyGainsChart: Scalars['String'];
@@ -140,6 +170,13 @@ export type Query = {
   getMyBitcoinWallet: Scalars['String'];
   getMyWithdrawalStatment: Array<UserBitcoinWithdrawal>;
   getMyStatment: Array<Transfer>;
+  getMonthlyIncomes: Array<PlanDailyIncome>;
+  getUsersPendingWithdrawals: Array<UserBitcoinWithdrawal>;
+  getUsersSelectOptions: Array<UsersSelectOptions>;
+  getMonthlyManualBalances: Array<Transfer>;
+  getCardBalanceSum: Scalars['String'];
+  getMonthlyProcessedWithdrawals: Array<UserBitcoinWithdrawal>;
+  getUnilevelByUserId: Array<UnilevelNode>;
   hello: Scalars['String'];
 };
 
@@ -149,16 +186,6 @@ export type QueryGetValidIndicatorByUsernameArgs = {
 
 export type QueryGetMyBalanceCardArgs = {
   card: Scalars['String'];
-};
-
-export type QueryGetBinaryTreeArgs = {
-  clicked_user_id?: Maybe<Scalars['String']>;
-  going_up: Scalars['Boolean'];
-};
-
-export type QueryGetBinaryDailyResultsArgs = {
-  year: Scalars['Float'];
-  month: Scalars['Float'];
 };
 
 export type QueryGetMyGainsChartArgs = {
@@ -177,9 +204,33 @@ export type QueryGetMyStatmentArgs = {
   month: Scalars['Float'];
 };
 
+export type QueryGetMonthlyIncomesArgs = {
+  year: Scalars['Float'];
+  month: Scalars['Float'];
+};
+
+export type QueryGetMonthlyManualBalancesArgs = {
+  year: Scalars['Float'];
+  month: Scalars['Float'];
+};
+
+export type QueryGetCardBalanceSumArgs = {
+  card: Scalars['String'];
+};
+
+export type QueryGetMonthlyProcessedWithdrawalsArgs = {
+  year: Scalars['Float'];
+  month: Scalars['Float'];
+};
+
+export type QueryGetUnilevelByUserIdArgs = {
+  user_id?: Maybe<Scalars['String']>;
+};
+
 export type Transfer = {
   __typename?: 'Transfer';
   id: Scalars['String'];
+  user: User;
   card: Scalars['String'];
   usd_cents: Scalars['Float'];
   description: Scalars['String'];
@@ -187,6 +238,14 @@ export type Transfer = {
   formatted_usd_value: Scalars['String'];
   formatted_date: Scalars['String'];
   color: Scalars['String'];
+};
+
+export type UnilevelNode = {
+  __typename?: 'UnilevelNode';
+  user_id: Scalars['String'];
+  indicator_id: Scalars['String'];
+  user: User;
+  created_at: Scalars['DateTime'];
 };
 
 export type User = {
@@ -208,40 +267,6 @@ export type UserBalance = {
   formatted_usd_value: Scalars['String'];
 };
 
-export type UserBinaryKey = {
-  __typename?: 'UserBinaryKey';
-  user_id: Scalars['String'];
-  position: Scalars['String'];
-  created_at: Scalars['DateTime'];
-  updated_at: Scalars['DateTime'];
-};
-
-export type UserBinaryPoint = {
-  __typename?: 'UserBinaryPoint';
-  id: Scalars['String'];
-  user_id: Scalars['String'];
-  position: Scalars['String'];
-  formatted_position: Scalars['String'];
-  points: Scalars['Float'];
-  from_user_id: Scalars['String'];
-  from_user: User;
-  created_at: Scalars['DateTime'];
-  formatted_date: Scalars['String'];
-};
-
-export type UserBinaryStatus = {
-  __typename?: 'UserBinaryStatus';
-  id: Scalars['String'];
-  user_id: Scalars['String'];
-  left_points: Scalars['Float'];
-  right_points: Scalars['Float'];
-  bonus_usd_cents: Scalars['Float'];
-  max_usd_cents: Scalars['Float'];
-  created_at: Scalars['DateTime'];
-  formatted_date: Scalars['String'];
-  formatted_bonus_value: Scalars['String'];
-};
-
 export type UserBitcoinDepositEvent = {
   __typename?: 'UserBitcoinDepositEvent';
   address: Scalars['String'];
@@ -256,8 +281,10 @@ export type UserBitcoinDepositEvent = {
 export type UserBitcoinWithdrawal = {
   __typename?: 'UserBitcoinWithdrawal';
   id: Scalars['String'];
+  user: User;
   address: Scalars['String'];
   usd_cents: Scalars['Float'];
+  satoshis: Scalars['Float'];
   btc_usd_conversion: Scalars['Float'];
   txid?: Maybe<Scalars['String']>;
   created_at: Scalars['DateTime'];
@@ -273,6 +300,12 @@ export type UserSessionEvent = {
   __typename?: 'UserSessionEvent';
   token: Scalars['String'];
   created_at: Scalars['DateTime'];
+};
+
+export type UsersSelectOptions = {
+  __typename?: 'UsersSelectOptions';
+  value: Scalars['String'];
+  label: Scalars['String'];
 };
 
 export type CreateBitcoinDepositMutationVariables = Exact<{
@@ -389,17 +422,6 @@ export type SendForgotPasswordEmailMutation = {
   __typename?: 'Mutation';
 } & Pick<Mutation, 'sendForgotPasswordEmail'>;
 
-export type UpdateMyBinaryKeyMutationVariables = Exact<{
-  position: Scalars['String'];
-}>;
-
-export type UpdateMyBinaryKeyMutation = { __typename?: 'Mutation' } & {
-  updateMyBinaryKey: { __typename?: 'UserBinaryKey' } & Pick<
-    UserBinaryKey,
-    'position'
-  >;
-};
-
 export type UpdateMyProfileMutationVariables = Exact<{
   phone_number: Scalars['String'];
   full_name: Scalars['String'];
@@ -410,34 +432,6 @@ export type UpdateMyProfileMutationVariables = Exact<{
 export type UpdateMyProfileMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
   'updateMyProfile'
->;
-
-export type GetBinaryDailyResultsQueryVariables = Exact<{
-  month: Scalars['Float'];
-  year: Scalars['Float'];
-}>;
-
-export type GetBinaryDailyResultsQuery = { __typename?: 'Query' } & {
-  getBinaryDailyResults: Array<
-    { __typename?: 'UserBinaryStatus' } & Pick<
-      UserBinaryStatus,
-      | 'id'
-      | 'left_points'
-      | 'right_points'
-      | 'formatted_date'
-      | 'formatted_bonus_value'
-    >
-  >;
-};
-
-export type GetBinaryTreeQueryVariables = Exact<{
-  clicked_user_id?: Maybe<Scalars['String']>;
-  going_up: Scalars['Boolean'];
-}>;
-
-export type GetBinaryTreeQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'getBinaryTree'
 >;
 
 export type GetHasBitcoinWalletQueryVariables = Exact<{ [key: string]: never }>;
@@ -487,15 +481,6 @@ export type GetMyBalanceCardQuery = { __typename?: 'Query' } & {
   getMyBalanceCard: { __typename?: 'UserBalance' } & Pick<
     UserBalance,
     'id' | 'usd_cents' | 'card' | 'formatted_usd_value'
-  >;
-};
-
-export type GetMyBinaryKeyQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetMyBinaryKeyQuery = { __typename?: 'Query' } & {
-  getMyBinaryKey: { __typename?: 'UserBinaryKey' } & Pick<
-    UserBinaryKey,
-    'position'
   >;
 };
 
@@ -577,16 +562,21 @@ export type GetPlansQuery = { __typename?: 'Query' } & {
   >;
 };
 
-export type GetTodayBinaryPointsQueryVariables = Exact<{
-  [key: string]: never;
+export type GetUnilevelByUserIdQueryVariables = Exact<{
+  user_id: Scalars['String'];
 }>;
 
-export type GetTodayBinaryPointsQuery = { __typename?: 'Query' } & {
-  getTodayBinaryPoints: Array<
-    { __typename?: 'UserBinaryPoint' } & Pick<
-      UserBinaryPoint,
-      'id' | 'formatted_position' | 'formatted_date' | 'position' | 'points'
-    > & { from_user: { __typename?: 'User' } & Pick<User, 'username'> }
+export type GetUnilevelByUserIdQuery = { __typename?: 'Query' } & {
+  getUnilevelByUserId: Array<
+    { __typename?: 'UnilevelNode' } & Pick<
+      UnilevelNode,
+      'user_id' | 'indicator_id'
+    > & {
+        user: { __typename?: 'User' } & Pick<
+          User,
+          'id' | 'full_name' | 'email' | 'phone_number'
+        >;
+      }
   >;
 };
 
@@ -1196,56 +1186,6 @@ export type SendForgotPasswordEmailMutationOptions = Apollo.BaseMutationOptions<
   SendForgotPasswordEmailMutation,
   SendForgotPasswordEmailMutationVariables
 >;
-export const UpdateMyBinaryKeyDocument = gql`
-  mutation updateMyBinaryKey($position: String!) {
-    updateMyBinaryKey(position: $position) {
-      position
-    }
-  }
-`;
-export type UpdateMyBinaryKeyMutationFn = Apollo.MutationFunction<
-  UpdateMyBinaryKeyMutation,
-  UpdateMyBinaryKeyMutationVariables
->;
-
-/**
- * __useUpdateMyBinaryKeyMutation__
- *
- * To run a mutation, you first call `useUpdateMyBinaryKeyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateMyBinaryKeyMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateMyBinaryKeyMutation, { data, loading, error }] = useUpdateMyBinaryKeyMutation({
- *   variables: {
- *      position: // value for 'position'
- *   },
- * });
- */
-export function useUpdateMyBinaryKeyMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateMyBinaryKeyMutation,
-    UpdateMyBinaryKeyMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateMyBinaryKeyMutation,
-    UpdateMyBinaryKeyMutationVariables
-  >(UpdateMyBinaryKeyDocument, options);
-}
-export type UpdateMyBinaryKeyMutationHookResult = ReturnType<
-  typeof useUpdateMyBinaryKeyMutation
->;
-export type UpdateMyBinaryKeyMutationResult =
-  Apollo.MutationResult<UpdateMyBinaryKeyMutation>;
-export type UpdateMyBinaryKeyMutationOptions = Apollo.BaseMutationOptions<
-  UpdateMyBinaryKeyMutation,
-  UpdateMyBinaryKeyMutationVariables
->;
 export const UpdateMyProfileDocument = gql`
   mutation updateMyProfile(
     $phone_number: String!
@@ -1306,126 +1246,6 @@ export type UpdateMyProfileMutationResult =
 export type UpdateMyProfileMutationOptions = Apollo.BaseMutationOptions<
   UpdateMyProfileMutation,
   UpdateMyProfileMutationVariables
->;
-export const GetBinaryDailyResultsDocument = gql`
-  query getBinaryDailyResults($month: Float!, $year: Float!) {
-    getBinaryDailyResults(month: $month, year: $year) {
-      id
-      left_points
-      right_points
-      formatted_date
-      formatted_bonus_value
-    }
-  }
-`;
-
-/**
- * __useGetBinaryDailyResultsQuery__
- *
- * To run a query within a React component, call `useGetBinaryDailyResultsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBinaryDailyResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBinaryDailyResultsQuery({
- *   variables: {
- *      month: // value for 'month'
- *      year: // value for 'year'
- *   },
- * });
- */
-export function useGetBinaryDailyResultsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetBinaryDailyResultsQuery,
-    GetBinaryDailyResultsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetBinaryDailyResultsQuery,
-    GetBinaryDailyResultsQueryVariables
-  >(GetBinaryDailyResultsDocument, options);
-}
-export function useGetBinaryDailyResultsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetBinaryDailyResultsQuery,
-    GetBinaryDailyResultsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetBinaryDailyResultsQuery,
-    GetBinaryDailyResultsQueryVariables
-  >(GetBinaryDailyResultsDocument, options);
-}
-export type GetBinaryDailyResultsQueryHookResult = ReturnType<
-  typeof useGetBinaryDailyResultsQuery
->;
-export type GetBinaryDailyResultsLazyQueryHookResult = ReturnType<
-  typeof useGetBinaryDailyResultsLazyQuery
->;
-export type GetBinaryDailyResultsQueryResult = Apollo.QueryResult<
-  GetBinaryDailyResultsQuery,
-  GetBinaryDailyResultsQueryVariables
->;
-export const GetBinaryTreeDocument = gql`
-  query getBinaryTree($clicked_user_id: String, $going_up: Boolean!) {
-    getBinaryTree(clicked_user_id: $clicked_user_id, going_up: $going_up)
-  }
-`;
-
-/**
- * __useGetBinaryTreeQuery__
- *
- * To run a query within a React component, call `useGetBinaryTreeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBinaryTreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBinaryTreeQuery({
- *   variables: {
- *      clicked_user_id: // value for 'clicked_user_id'
- *      going_up: // value for 'going_up'
- *   },
- * });
- */
-export function useGetBinaryTreeQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetBinaryTreeQuery,
-    GetBinaryTreeQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetBinaryTreeQuery, GetBinaryTreeQueryVariables>(
-    GetBinaryTreeDocument,
-    options,
-  );
-}
-export function useGetBinaryTreeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetBinaryTreeQuery,
-    GetBinaryTreeQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetBinaryTreeQuery, GetBinaryTreeQueryVariables>(
-    GetBinaryTreeDocument,
-    options,
-  );
-}
-export type GetBinaryTreeQueryHookResult = ReturnType<
-  typeof useGetBinaryTreeQuery
->;
-export type GetBinaryTreeLazyQueryHookResult = ReturnType<
-  typeof useGetBinaryTreeLazyQuery
->;
-export type GetBinaryTreeQueryResult = Apollo.QueryResult<
-  GetBinaryTreeQuery,
-  GetBinaryTreeQueryVariables
 >;
 export const GetHasBitcoinWalletDocument = gql`
   query getHasBitcoinWallet {
@@ -1759,63 +1579,6 @@ export type GetMyBalanceCardLazyQueryHookResult = ReturnType<
 export type GetMyBalanceCardQueryResult = Apollo.QueryResult<
   GetMyBalanceCardQuery,
   GetMyBalanceCardQueryVariables
->;
-export const GetMyBinaryKeyDocument = gql`
-  query getMyBinaryKey {
-    getMyBinaryKey {
-      position
-    }
-  }
-`;
-
-/**
- * __useGetMyBinaryKeyQuery__
- *
- * To run a query within a React component, call `useGetMyBinaryKeyQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyBinaryKeyQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMyBinaryKeyQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetMyBinaryKeyQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetMyBinaryKeyQuery,
-    GetMyBinaryKeyQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetMyBinaryKeyQuery, GetMyBinaryKeyQueryVariables>(
-    GetMyBinaryKeyDocument,
-    options,
-  );
-}
-export function useGetMyBinaryKeyLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetMyBinaryKeyQuery,
-    GetMyBinaryKeyQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetMyBinaryKeyQuery, GetMyBinaryKeyQueryVariables>(
-    GetMyBinaryKeyDocument,
-    options,
-  );
-}
-export type GetMyBinaryKeyQueryHookResult = ReturnType<
-  typeof useGetMyBinaryKeyQuery
->;
-export type GetMyBinaryKeyLazyQueryHookResult = ReturnType<
-  typeof useGetMyBinaryKeyLazyQuery
->;
-export type GetMyBinaryKeyQueryResult = Apollo.QueryResult<
-  GetMyBinaryKeyQuery,
-  GetMyBinaryKeyQueryVariables
 >;
 export const GetMyBitcoinWalletDocument = gql`
   query getMyBitcoinWallet {
@@ -2224,69 +1987,70 @@ export type GetPlansQueryResult = Apollo.QueryResult<
   GetPlansQuery,
   GetPlansQueryVariables
 >;
-export const GetTodayBinaryPointsDocument = gql`
-  query getTodayBinaryPoints {
-    getTodayBinaryPoints {
-      id
-      formatted_position
-      formatted_date
-      position
-      points
-      from_user {
-        username
+export const GetUnilevelByUserIdDocument = gql`
+  query getUnilevelByUserId($user_id: String!) {
+    getUnilevelByUserId(user_id: $user_id) {
+      user_id
+      indicator_id
+      user {
+        id
+        full_name
+        email
+        phone_number
       }
     }
   }
 `;
 
 /**
- * __useGetTodayBinaryPointsQuery__
+ * __useGetUnilevelByUserIdQuery__
  *
- * To run a query within a React component, call `useGetTodayBinaryPointsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTodayBinaryPointsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUnilevelByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnilevelByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTodayBinaryPointsQuery({
+ * const { data, loading, error } = useGetUnilevelByUserIdQuery({
  *   variables: {
+ *      user_id: // value for 'user_id'
  *   },
  * });
  */
-export function useGetTodayBinaryPointsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetTodayBinaryPointsQuery,
-    GetTodayBinaryPointsQueryVariables
+export function useGetUnilevelByUserIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUnilevelByUserIdQuery,
+    GetUnilevelByUserIdQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetTodayBinaryPointsQuery,
-    GetTodayBinaryPointsQueryVariables
-  >(GetTodayBinaryPointsDocument, options);
+    GetUnilevelByUserIdQuery,
+    GetUnilevelByUserIdQueryVariables
+  >(GetUnilevelByUserIdDocument, options);
 }
-export function useGetTodayBinaryPointsLazyQuery(
+export function useGetUnilevelByUserIdLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetTodayBinaryPointsQuery,
-    GetTodayBinaryPointsQueryVariables
+    GetUnilevelByUserIdQuery,
+    GetUnilevelByUserIdQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetTodayBinaryPointsQuery,
-    GetTodayBinaryPointsQueryVariables
-  >(GetTodayBinaryPointsDocument, options);
+    GetUnilevelByUserIdQuery,
+    GetUnilevelByUserIdQueryVariables
+  >(GetUnilevelByUserIdDocument, options);
 }
-export type GetTodayBinaryPointsQueryHookResult = ReturnType<
-  typeof useGetTodayBinaryPointsQuery
+export type GetUnilevelByUserIdQueryHookResult = ReturnType<
+  typeof useGetUnilevelByUserIdQuery
 >;
-export type GetTodayBinaryPointsLazyQueryHookResult = ReturnType<
-  typeof useGetTodayBinaryPointsLazyQuery
+export type GetUnilevelByUserIdLazyQueryHookResult = ReturnType<
+  typeof useGetUnilevelByUserIdLazyQuery
 >;
-export type GetTodayBinaryPointsQueryResult = Apollo.QueryResult<
-  GetTodayBinaryPointsQuery,
-  GetTodayBinaryPointsQueryVariables
+export type GetUnilevelByUserIdQueryResult = Apollo.QueryResult<
+  GetUnilevelByUserIdQuery,
+  GetUnilevelByUserIdQueryVariables
 >;
 export const GetValidIndicatorByUsernameDocument = gql`
   query getValidIndicatorByUsername($username: String!) {

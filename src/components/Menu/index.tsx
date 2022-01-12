@@ -9,6 +9,7 @@ import {
   // FaNetworkWired
 } from 'react-icons/fa';
 
+import { MdLinearScale } from 'react-icons/md';
 import Logo from '../Logo';
 
 import { Container, NavHeader, Nav, Wrap, ListaNav, NavItem } from './styles';
@@ -61,6 +62,20 @@ export default function Menu({ callback }: IProps): JSX.Element {
                   >
                     <FcHome size={24} />
                     Dashboard
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink
+                    activeClassName="current"
+                    to="/unilevel"
+                    onClick={() => {
+                      callback();
+                      handlerOnClick('');
+                    }}
+                  >
+                    <MdLinearScale size={24} />
+                    Clients
                   </NavLink>
                 </NavItem>
 
