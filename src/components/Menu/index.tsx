@@ -9,6 +9,8 @@ import {
   // FaNetworkWired
 } from 'react-icons/fa';
 
+import { AiOutlineBank } from 'react-icons/ai';
+
 import { MdLinearScale } from 'react-icons/md';
 import Logo from '../Logo';
 
@@ -76,6 +78,20 @@ export default function Menu({ callback }: IProps): JSX.Element {
                   >
                     <MdLinearScale size={24} />
                     Clients
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink
+                    activeClassName="current"
+                    to="/deposits"
+                    onClick={() => {
+                      callback();
+                      handlerOnClick('');
+                    }}
+                  >
+                    <AiOutlineBank size={24} />
+                    Bank Deposits
                   </NavLink>
                 </NavItem>
 

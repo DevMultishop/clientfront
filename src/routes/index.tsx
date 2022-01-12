@@ -14,6 +14,7 @@ import Statment from '../pages/Statment';
 import Profile from '../pages/Profile';
 import Gains from '../pages/Gains';
 import Unilevel from '../pages/Unilevel';
+import BankDeposit from '../pages/BankDeposits';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -33,6 +34,7 @@ const Routes: React.FC = () => (
     <Route path="/profile" component={Profile} isPrivate />
     <Route path="/gains" component={Gains} isPrivate />
     <Route path="/unilevel" component={Unilevel} isPrivate />
+    <Route path="/deposits" component={BankDeposit} isPrivate />
   </Switch>
 );
 

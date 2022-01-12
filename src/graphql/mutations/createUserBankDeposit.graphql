@@ -1,0 +1,11 @@
+mutation createUserBankDeposit(
+  $usd_cents:Float!
+  $financial_password:String!
+  $comprovant: Upload!
+){
+  createUserBankDeposit(
+    usd_cents:$usd_cents
+    financial_password:$financial_password
+    comprovant:$comprovant
+  )
+}
